@@ -21,9 +21,9 @@ existing_user = raw_input("Do you want to continue as " + spy.salutation + ' ' +
 def add_status(current_status_message):
     updated_status_message = None
     if spy.current_status_message is not None:
-        print 'Your current status message is %s : ' % current_status_message
+        print 'Your current status message is %s. : ' % current_status_message
     else:
-        print 'You don\'t have any status message currently '
+        print 'You don\'t have any status message currently. '
     default = raw_input("Do you want to select from the older status (Y/N)? ")
 #Condition for adding new status.
     if default.upper() == 'N':
@@ -39,10 +39,10 @@ def add_status(current_status_message):
             message_position += 1
         selected_message = int(raw_input("Enter the Message Number you want to select : "))
         while len(existing_status_messages) < selected_message:
-            print "Please select a valid option from 1 to %d" % len(existing_status_messages)
+            print "Please select a valid option from 1 to %d." % len(existing_status_messages)
         updated_status_message = existing_status_messages[selected_message - 1]
     if updated_status_message:
-        print "Your new updated message is: %s" % updated_status_message
+        print "Your new updated message is: %s." % updated_status_message
     else:
         print 'Status message was not updated.'
     return updated_status_message
@@ -54,15 +54,15 @@ def add_friend():
     new_friend.name = raw_input("Please add your friend's name : ")
     new_friend.salutation = raw_input("Are they Mr. or Ms.? : ")
     new_friend.name = new_friend.name + " " + new_friend.salutation
-    new_friend.age = int(raw_input("Please enter friends age : "))
-    new_friend.rating = float(raw_input("Please enter friends rating : "))
+    new_friend.age = int(raw_input("Please enter friend's age : "))
+    new_friend.rating = float(raw_input("Please enter friend's rating : "))
 
 #Condition for adding friends above a threshold repo.
     if len(new_friend.name) > 0 and new_friend.age > 12 and new_friend.rating >= 2.5:
         friends.append(new_friend)
-        print "friend added"
+        print "Friend added."
     else:
-        print 'Sorry! Invalid entry. We can\'t add spy with the details you provided'
+        print 'Sorry! Invalid entry. We can\'t add spy as friend with the details you have provided.'
 
     return len(friends)
 
@@ -71,7 +71,7 @@ def select_friend():
     item_number = 0
 #Loop for selecting friend from the list.
     for friend in friends:
-        print '%d. %s aged %d with rating %.2f is online' % (item_number + 1, friend.name,friend.age,friend.rating)
+        print '%d. %s aged %d with rating %.2f is online.' % (item_number + 1, friend.name,friend.rating,friend.age)
 #item_number is increased by 1 to eliminate zero indexing.
         item_number = item_number + 1
     friend_choice = raw_input("Choose the serial number of a friend from your friends list.\n")
@@ -80,7 +80,6 @@ def select_friend():
 
 #Sending a message to the friend selected from select_friend function.
 def send_message():
-    print "this is me"
     friend_choice = select_friend()
     original_image = raw_input("What is the name of the image?")
     output_path = "output.jpg"
@@ -99,6 +98,7 @@ def read_message():
     sender = select_friend()
     output_path = raw_input("What is the name of the file?")
     secret_text = Steganography.decode(output_path)
+    print secret_text
     for word in special_words:
         if word in secret_text:
             print "SOS message received."
@@ -114,8 +114,8 @@ def read_message():
         new_chat = ChatMessage(secret_text, False)
 #Saving the decoded message in the chats list for the corresponding friend.
         friends[sender].chats.append(new_chat)
-        Spy.total_messages_sent = Spy.total_messages_sent + 1
-        Spy.average_words = (Spy.average_words + len(number_of_words)) /Spy.total_messages_sent
+        spy.total_messages_sent = spy.total_messages_sent + 1
+        spy.average_words = (spy.average_words + len(number_of_words)) /spy.total_messages_sent
         for word in special_words:
             if word.upper() in secret_text.upper():
                 print word + " .Message received"
@@ -133,9 +133,9 @@ def read_chat_history():
         for chat in friends[read_for].chats:
 #Condition for showing time of message with the message.Color code is implemented here using using Colorama and Termcolor libraries.
             if chat.sent_by_me :
-                print (colored("[%s]","blue","on_black") % (chat.time.strftime("%d %B %Y") + colored("You said: "),"red","on_black") + colored("%s","black","on_white")) % chat.message
+                print(colored("[%s]", "blue") % chat.time.strftime("%d %B %Y") + colored("You said","red") + ": " + chat.message)
             else:
-                print (colored("[%s]","blue","on_black") % (chat.time.strftime("%d %B %Y") + colored("%s"),"red","on_black") % (friends[read_for.name]) + colored("%s","black","on_white")) %(chat.message)
+                print(colored("[%s]", "blue") % chat.time.strftime("%d %B %Y") + colored("%s", "red") % friends[read_for].name + ": " + chat.message)
 
 #Main function which implements the menu and takes in the detail of a new user or uses the details of the existing user.
 def start_chat(spy):
@@ -159,10 +159,6 @@ def start_chat(spy):
                     print 'You have %d friends' % number_of_friends
                 elif menu_choice == 3:
                     selected_friend_index = send_message()
-                    if selected_friend_index is -1:
-                        print "You have no friends. Please add friends first"
-                    else:
-                        print "you selected friend index number : %d" % selected_friend_index
                 elif menu_choice == 4:
                     read_message()
                 elif menu_choice == 5:
